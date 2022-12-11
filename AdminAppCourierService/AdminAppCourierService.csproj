@@ -52,8 +52,20 @@
     <Compile Include="AdminForm.Designer.cs">
       <DependentUpon>AdminForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Entities\Accounts.cs" />
+    <Compile Include="Entities\Adresses.cs" />
+    <Compile Include="Entities\Archive.cs" />
+    <Compile Include="Entities\Cars.cs" />
+    <Compile Include="Entities\Details.cs" />
+    <Compile Include="Entities\Drivers.cs" />
+    <Compile Include="Entities\Log.cs" />
+    <Compile Include="Entities\Movers.cs" />
+    <Compile Include="Entities\Nodes.cs" />
+    <Compile Include="Entities\Orders.cs" />
+    <Compile Include="Entities\Taxes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SQLWorkerAdminApp.cs" />
     <EmbeddedResource Include="AdminForm.resx">
       <DependentUpon>AdminForm.cs</DependentUpon>
     </EmbeddedResource>
