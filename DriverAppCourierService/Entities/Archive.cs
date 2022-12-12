@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdminAppCourierService.Entities
+namespace DriverAppCourierService.Entities
 {
-    class Movers
+    class Archive
     {
         public int Id { get; set; }
-        public int? IdOrder { get; set; }
-        public string Name { get; set; }
-        public string Phone { get; set; }
+        public string DriverName { get; set; }
+        public string CarNumber { get; set; }
+        public string OrderPoints { get; set; }
 
         public override string ToString()
         {

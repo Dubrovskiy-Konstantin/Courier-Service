@@ -31,26 +31,17 @@ namespace AdminAppCourierService
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tablesTab = new System.Windows.Forms.TabPage();
-            this.ordersDataGridView = new System.Windows.Forms.DataGridView();
+            this.tablesDataGridView = new System.Windows.Forms.DataGridView();
             this.deleteButton = new System.Windows.Forms.Button();
             this.refreshButton = new System.Windows.Forms.Button();
             this.dropDownList = new System.Windows.Forms.ComboBox();
             this.addTab = new System.Windows.Forms.TabPage();
             this.groupBoxCar = new System.Windows.Forms.GroupBox();
             this.addCarButton = new System.Windows.Forms.Button();
-            this.textBoxCarLastMaintenance = new System.Windows.Forms.TextBox();
-            this.textBoxCarYear = new System.Windows.Forms.TextBox();
-            this.textBoxCarMileage = new System.Windows.Forms.TextBox();
-            this.textBoxCarNumber = new System.Windows.Forms.TextBox();
-            this.textBoxCarName = new System.Windows.Forms.TextBox();
             this.groupBoxMover = new System.Windows.Forms.GroupBox();
             this.addMoverButton = new System.Windows.Forms.Button();
-            this.textBoxMoverPhone = new System.Windows.Forms.TextBox();
-            this.textBoxMoverName = new System.Windows.Forms.TextBox();
             this.groupBoxDriver = new System.Windows.Forms.GroupBox();
             this.addDriverButton = new System.Windows.Forms.Button();
-            this.textBoxDriverPhone = new System.Windows.Forms.TextBox();
-            this.textBoxDriverName = new System.Windows.Forms.TextBox();
             this.archiveTab = new System.Windows.Forms.TabPage();
             this.archiveDataGridView = new System.Windows.Forms.DataGridView();
             this.totalIncomeLabel = new System.Windows.Forms.Label();
@@ -58,9 +49,20 @@ namespace AdminAppCourierService
             this.showButton = new System.Windows.Forms.Button();
             this.dateTimePickerEnd = new System.Windows.Forms.DateTimePicker();
             this.dateTimePickerStart = new System.Windows.Forms.DateTimePicker();
+            this.driverPhoneTextBox = new System.Windows.Forms.TextBox();
+            this.driverNameTextBox = new System.Windows.Forms.TextBox();
+            this.moverPhoneTextBox = new System.Windows.Forms.TextBox();
+            this.moverNameTextBox = new System.Windows.Forms.TextBox();
+            this.carMarkTextBox = new System.Windows.Forms.TextBox();
+            this.carRegistryNumberTextBox = new System.Windows.Forms.TextBox();
+            this.carIssueYearTextBox = new System.Windows.Forms.TextBox();
+            this.carMileageTextBox = new System.Windows.Forms.TextBox();
+            this.carLastMaintenanceTextBox = new System.Windows.Forms.TextBox();
+            this.accountEmailTextBox = new System.Windows.Forms.TextBox();
+            this.accountPasswordTextBox = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tablesTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ordersDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tablesDataGridView)).BeginInit();
             this.addTab.SuspendLayout();
             this.groupBoxCar.SuspendLayout();
             this.groupBoxMover.SuspendLayout();
@@ -82,7 +84,7 @@ namespace AdminAppCourierService
             // 
             // tablesTab
             // 
-            this.tablesTab.Controls.Add(this.ordersDataGridView);
+            this.tablesTab.Controls.Add(this.tablesDataGridView);
             this.tablesTab.Controls.Add(this.deleteButton);
             this.tablesTab.Controls.Add(this.refreshButton);
             this.tablesTab.Controls.Add(this.dropDownList);
@@ -94,15 +96,15 @@ namespace AdminAppCourierService
             this.tablesTab.Text = "Tables";
             this.tablesTab.UseVisualStyleBackColor = true;
             // 
-            // ordersDataGridView
+            // tablesDataGridView
             // 
-            this.ordersDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ordersDataGridView.Location = new System.Drawing.Point(12, 78);
-            this.ordersDataGridView.Name = "ordersDataGridView";
-            this.ordersDataGridView.RowHeadersWidth = 51;
-            this.ordersDataGridView.RowTemplate.Height = 24;
-            this.ordersDataGridView.Size = new System.Drawing.Size(1358, 735);
-            this.ordersDataGridView.TabIndex = 3;
+            this.tablesDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.tablesDataGridView.Location = new System.Drawing.Point(12, 78);
+            this.tablesDataGridView.Name = "tablesDataGridView";
+            this.tablesDataGridView.RowHeadersWidth = 51;
+            this.tablesDataGridView.RowTemplate.Height = 24;
+            this.tablesDataGridView.Size = new System.Drawing.Size(1358, 735);
+            this.tablesDataGridView.TabIndex = 3;
             // 
             // deleteButton
             // 
@@ -123,15 +125,28 @@ namespace AdminAppCourierService
             this.refreshButton.TabIndex = 1;
             this.refreshButton.Text = "Refresh";
             this.refreshButton.UseVisualStyleBackColor = true;
+            this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
             // 
             // dropDownList
             // 
             this.dropDownList.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.dropDownList.FormattingEnabled = true;
+            this.dropDownList.Items.AddRange(new object[] {
+            "Accounts",
+            "Adresses",
+            "Cars",
+            "Details",
+            "Drivers",
+            "Log",
+            "Movers",
+            "Nodes",
+            "Orders",
+            "Taxes"});
             this.dropDownList.Location = new System.Drawing.Point(12, 24);
             this.dropDownList.Name = "dropDownList";
             this.dropDownList.Size = new System.Drawing.Size(200, 37);
             this.dropDownList.TabIndex = 0;
+            this.dropDownList.SelectedIndexChanged += new System.EventHandler(this.dropDownList_SelectedIndexChanged);
             // 
             // addTab
             // 
@@ -148,16 +163,16 @@ namespace AdminAppCourierService
             // 
             // groupBoxCar
             // 
+            this.groupBoxCar.Controls.Add(this.carLastMaintenanceTextBox);
+            this.groupBoxCar.Controls.Add(this.carMileageTextBox);
+            this.groupBoxCar.Controls.Add(this.carIssueYearTextBox);
+            this.groupBoxCar.Controls.Add(this.carRegistryNumberTextBox);
+            this.groupBoxCar.Controls.Add(this.carMarkTextBox);
             this.groupBoxCar.Controls.Add(this.addCarButton);
-            this.groupBoxCar.Controls.Add(this.textBoxCarLastMaintenance);
-            this.groupBoxCar.Controls.Add(this.textBoxCarYear);
-            this.groupBoxCar.Controls.Add(this.textBoxCarMileage);
-            this.groupBoxCar.Controls.Add(this.textBoxCarNumber);
-            this.groupBoxCar.Controls.Add(this.textBoxCarName);
             this.groupBoxCar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBoxCar.Location = new System.Drawing.Point(920, 100);
             this.groupBoxCar.Name = "groupBoxCar";
-            this.groupBoxCar.Size = new System.Drawing.Size(400, 600);
+            this.groupBoxCar.Size = new System.Drawing.Size(400, 575);
             this.groupBoxCar.TabIndex = 1;
             this.groupBoxCar.TabStop = false;
             this.groupBoxCar.Text = "Car";
@@ -170,135 +185,55 @@ namespace AdminAppCourierService
             this.addCarButton.TabIndex = 5;
             this.addCarButton.Text = "Add";
             this.addCarButton.UseVisualStyleBackColor = true;
-            // 
-            // textBoxCarLastMaintenance
-            // 
-            this.textBoxCarLastMaintenance.Location = new System.Drawing.Point(50, 420);
-            this.textBoxCarLastMaintenance.MaximumSize = new System.Drawing.Size(300, 50);
-            this.textBoxCarLastMaintenance.MinimumSize = new System.Drawing.Size(300, 50);
-            this.textBoxCarLastMaintenance.Name = "textBoxCarLastMaintenance";
-            this.textBoxCarLastMaintenance.Size = new System.Drawing.Size(300, 30);
-            this.textBoxCarLastMaintenance.TabIndex = 8;
-            // 
-            // textBoxCarYear
-            // 
-            this.textBoxCarYear.Location = new System.Drawing.Point(50, 340);
-            this.textBoxCarYear.MaximumSize = new System.Drawing.Size(300, 50);
-            this.textBoxCarYear.MinimumSize = new System.Drawing.Size(300, 50);
-            this.textBoxCarYear.Name = "textBoxCarYear";
-            this.textBoxCarYear.Size = new System.Drawing.Size(300, 30);
-            this.textBoxCarYear.TabIndex = 7;
-            // 
-            // textBoxCarMileage
-            // 
-            this.textBoxCarMileage.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBoxCarMileage.Location = new System.Drawing.Point(50, 260);
-            this.textBoxCarMileage.MaximumSize = new System.Drawing.Size(300, 50);
-            this.textBoxCarMileage.MinimumSize = new System.Drawing.Size(300, 50);
-            this.textBoxCarMileage.Name = "textBoxCarMileage";
-            this.textBoxCarMileage.Size = new System.Drawing.Size(300, 36);
-            this.textBoxCarMileage.TabIndex = 6;
-            // 
-            // textBoxCarNumber
-            // 
-            this.textBoxCarNumber.Location = new System.Drawing.Point(50, 180);
-            this.textBoxCarNumber.MaximumSize = new System.Drawing.Size(300, 50);
-            this.textBoxCarNumber.MinimumSize = new System.Drawing.Size(300, 50);
-            this.textBoxCarNumber.Name = "textBoxCarNumber";
-            this.textBoxCarNumber.Size = new System.Drawing.Size(300, 30);
-            this.textBoxCarNumber.TabIndex = 5;
-            // 
-            // textBoxCarName
-            // 
-            this.textBoxCarName.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBoxCarName.Location = new System.Drawing.Point(50, 100);
-            this.textBoxCarName.MaximumSize = new System.Drawing.Size(300, 50);
-            this.textBoxCarName.MinimumSize = new System.Drawing.Size(300, 50);
-            this.textBoxCarName.Name = "textBoxCarName";
-            this.textBoxCarName.Size = new System.Drawing.Size(300, 36);
-            this.textBoxCarName.TabIndex = 4;
+            this.addCarButton.Click += new System.EventHandler(this.addCarButton_Click);
             // 
             // groupBoxMover
             // 
+            this.groupBoxMover.Controls.Add(this.moverNameTextBox);
+            this.groupBoxMover.Controls.Add(this.moverPhoneTextBox);
             this.groupBoxMover.Controls.Add(this.addMoverButton);
-            this.groupBoxMover.Controls.Add(this.textBoxMoverPhone);
-            this.groupBoxMover.Controls.Add(this.textBoxMoverName);
             this.groupBoxMover.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBoxMover.Location = new System.Drawing.Point(480, 100);
             this.groupBoxMover.Name = "groupBoxMover";
-            this.groupBoxMover.Size = new System.Drawing.Size(400, 375);
+            this.groupBoxMover.Size = new System.Drawing.Size(400, 325);
             this.groupBoxMover.TabIndex = 1;
             this.groupBoxMover.TabStop = false;
             this.groupBoxMover.Text = "Mover";
             // 
             // addMoverButton
             // 
-            this.addMoverButton.Location = new System.Drawing.Point(120, 260);
+            this.addMoverButton.Location = new System.Drawing.Point(120, 240);
             this.addMoverButton.Name = "addMoverButton";
             this.addMoverButton.Size = new System.Drawing.Size(180, 50);
             this.addMoverButton.TabIndex = 4;
             this.addMoverButton.Text = "Add";
             this.addMoverButton.UseVisualStyleBackColor = true;
-            // 
-            // textBoxMoverPhone
-            // 
-            this.textBoxMoverPhone.Location = new System.Drawing.Point(50, 180);
-            this.textBoxMoverPhone.MaximumSize = new System.Drawing.Size(300, 50);
-            this.textBoxMoverPhone.MinimumSize = new System.Drawing.Size(300, 50);
-            this.textBoxMoverPhone.Name = "textBoxMoverPhone";
-            this.textBoxMoverPhone.Size = new System.Drawing.Size(300, 30);
-            this.textBoxMoverPhone.TabIndex = 3;
-            // 
-            // textBoxMoverName
-            // 
-            this.textBoxMoverName.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBoxMoverName.Location = new System.Drawing.Point(50, 100);
-            this.textBoxMoverName.MaximumSize = new System.Drawing.Size(300, 50);
-            this.textBoxMoverName.MinimumSize = new System.Drawing.Size(300, 50);
-            this.textBoxMoverName.Name = "textBoxMoverName";
-            this.textBoxMoverName.Size = new System.Drawing.Size(300, 36);
-            this.textBoxMoverName.TabIndex = 2;
+            this.addMoverButton.Click += new System.EventHandler(this.addMoverButton_Click);
             // 
             // groupBoxDriver
             // 
+            this.groupBoxDriver.Controls.Add(this.accountPasswordTextBox);
+            this.groupBoxDriver.Controls.Add(this.accountEmailTextBox);
+            this.groupBoxDriver.Controls.Add(this.driverNameTextBox);
+            this.groupBoxDriver.Controls.Add(this.driverPhoneTextBox);
             this.groupBoxDriver.Controls.Add(this.addDriverButton);
-            this.groupBoxDriver.Controls.Add(this.textBoxDriverPhone);
-            this.groupBoxDriver.Controls.Add(this.textBoxDriverName);
             this.groupBoxDriver.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBoxDriver.Location = new System.Drawing.Point(40, 100);
             this.groupBoxDriver.Name = "groupBoxDriver";
-            this.groupBoxDriver.Size = new System.Drawing.Size(400, 375);
+            this.groupBoxDriver.Size = new System.Drawing.Size(400, 475);
             this.groupBoxDriver.TabIndex = 0;
             this.groupBoxDriver.TabStop = false;
             this.groupBoxDriver.Text = "Driver";
             // 
             // addDriverButton
             // 
-            this.addDriverButton.Location = new System.Drawing.Point(120, 260);
+            this.addDriverButton.Location = new System.Drawing.Point(120, 400);
             this.addDriverButton.Name = "addDriverButton";
             this.addDriverButton.Size = new System.Drawing.Size(180, 50);
             this.addDriverButton.TabIndex = 2;
             this.addDriverButton.Text = "Add";
             this.addDriverButton.UseVisualStyleBackColor = true;
-            // 
-            // textBoxDriverPhone
-            // 
-            this.textBoxDriverPhone.Location = new System.Drawing.Point(50, 180);
-            this.textBoxDriverPhone.MaximumSize = new System.Drawing.Size(300, 50);
-            this.textBoxDriverPhone.MinimumSize = new System.Drawing.Size(300, 50);
-            this.textBoxDriverPhone.Name = "textBoxDriverPhone";
-            this.textBoxDriverPhone.Size = new System.Drawing.Size(300, 30);
-            this.textBoxDriverPhone.TabIndex = 1;
-            // 
-            // textBoxDriverName
-            // 
-            this.textBoxDriverName.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBoxDriverName.Location = new System.Drawing.Point(50, 100);
-            this.textBoxDriverName.MaximumSize = new System.Drawing.Size(300, 50);
-            this.textBoxDriverName.MinimumSize = new System.Drawing.Size(300, 50);
-            this.textBoxDriverName.Name = "textBoxDriverName";
-            this.textBoxDriverName.Size = new System.Drawing.Size(300, 36);
-            this.textBoxDriverName.TabIndex = 0;
+            this.addDriverButton.Click += new System.EventHandler(this.addDriverButton_Click);
             // 
             // archiveTab
             // 
@@ -371,6 +306,116 @@ namespace AdminAppCourierService
             this.dateTimePickerStart.Size = new System.Drawing.Size(340, 30);
             this.dateTimePickerStart.TabIndex = 0;
             // 
+            // driverPhoneTextBox
+            // 
+            this.driverPhoneTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.driverPhoneTextBox.Location = new System.Drawing.Point(50, 160);
+            this.driverPhoneTextBox.MaximumSize = new System.Drawing.Size(300, 50);
+            this.driverPhoneTextBox.MinimumSize = new System.Drawing.Size(300, 50);
+            this.driverPhoneTextBox.Name = "driverPhoneTextBox";
+            this.driverPhoneTextBox.Size = new System.Drawing.Size(300, 50);
+            this.driverPhoneTextBox.TabIndex = 2;
+            // 
+            // driverNameTextBox
+            // 
+            this.driverNameTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.driverNameTextBox.Location = new System.Drawing.Point(50, 80);
+            this.driverNameTextBox.MaximumSize = new System.Drawing.Size(300, 50);
+            this.driverNameTextBox.MinimumSize = new System.Drawing.Size(300, 50);
+            this.driverNameTextBox.Name = "driverNameTextBox";
+            this.driverNameTextBox.Size = new System.Drawing.Size(300, 50);
+            this.driverNameTextBox.TabIndex = 3;
+            // 
+            // moverPhoneTextBox
+            // 
+            this.moverPhoneTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.moverPhoneTextBox.Location = new System.Drawing.Point(50, 160);
+            this.moverPhoneTextBox.MaximumSize = new System.Drawing.Size(300, 50);
+            this.moverPhoneTextBox.MinimumSize = new System.Drawing.Size(300, 50);
+            this.moverPhoneTextBox.Name = "moverPhoneTextBox";
+            this.moverPhoneTextBox.Size = new System.Drawing.Size(300, 50);
+            this.moverPhoneTextBox.TabIndex = 4;
+            // 
+            // moverNameTextBox
+            // 
+            this.moverNameTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.moverNameTextBox.Location = new System.Drawing.Point(50, 80);
+            this.moverNameTextBox.MaximumSize = new System.Drawing.Size(300, 50);
+            this.moverNameTextBox.MinimumSize = new System.Drawing.Size(300, 50);
+            this.moverNameTextBox.Name = "moverNameTextBox";
+            this.moverNameTextBox.Size = new System.Drawing.Size(300, 50);
+            this.moverNameTextBox.TabIndex = 5;
+            // 
+            // carMarkTextBox
+            // 
+            this.carMarkTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.carMarkTextBox.Location = new System.Drawing.Point(50, 80);
+            this.carMarkTextBox.MaximumSize = new System.Drawing.Size(300, 50);
+            this.carMarkTextBox.MinimumSize = new System.Drawing.Size(300, 50);
+            this.carMarkTextBox.Name = "carMarkTextBox";
+            this.carMarkTextBox.Size = new System.Drawing.Size(300, 50);
+            this.carMarkTextBox.TabIndex = 6;
+            // 
+            // carRegistryNumberTextBox
+            // 
+            this.carRegistryNumberTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.carRegistryNumberTextBox.Location = new System.Drawing.Point(50, 160);
+            this.carRegistryNumberTextBox.MaximumSize = new System.Drawing.Size(300, 50);
+            this.carRegistryNumberTextBox.MinimumSize = new System.Drawing.Size(300, 50);
+            this.carRegistryNumberTextBox.Name = "carRegistryNumberTextBox";
+            this.carRegistryNumberTextBox.Size = new System.Drawing.Size(300, 50);
+            this.carRegistryNumberTextBox.TabIndex = 9;
+            // 
+            // carIssueYearTextBox
+            // 
+            this.carIssueYearTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.carIssueYearTextBox.Location = new System.Drawing.Point(50, 240);
+            this.carIssueYearTextBox.MaximumSize = new System.Drawing.Size(300, 50);
+            this.carIssueYearTextBox.MinimumSize = new System.Drawing.Size(300, 50);
+            this.carIssueYearTextBox.Name = "carIssueYearTextBox";
+            this.carIssueYearTextBox.Size = new System.Drawing.Size(300, 50);
+            this.carIssueYearTextBox.TabIndex = 10;
+            // 
+            // carMileageTextBox
+            // 
+            this.carMileageTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.carMileageTextBox.Location = new System.Drawing.Point(50, 320);
+            this.carMileageTextBox.MaximumSize = new System.Drawing.Size(300, 50);
+            this.carMileageTextBox.MinimumSize = new System.Drawing.Size(300, 50);
+            this.carMileageTextBox.Name = "carMileageTextBox";
+            this.carMileageTextBox.Size = new System.Drawing.Size(300, 50);
+            this.carMileageTextBox.TabIndex = 11;
+            // 
+            // carLastMaintenanceTextBox
+            // 
+            this.carLastMaintenanceTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.carLastMaintenanceTextBox.Location = new System.Drawing.Point(50, 400);
+            this.carLastMaintenanceTextBox.MaximumSize = new System.Drawing.Size(300, 50);
+            this.carLastMaintenanceTextBox.MinimumSize = new System.Drawing.Size(300, 50);
+            this.carLastMaintenanceTextBox.Name = "carLastMaintenanceTextBox";
+            this.carLastMaintenanceTextBox.Size = new System.Drawing.Size(300, 50);
+            this.carLastMaintenanceTextBox.TabIndex = 12;
+            // 
+            // accountEmailTextBox
+            // 
+            this.accountEmailTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.accountEmailTextBox.Location = new System.Drawing.Point(50, 240);
+            this.accountEmailTextBox.MaximumSize = new System.Drawing.Size(300, 50);
+            this.accountEmailTextBox.MinimumSize = new System.Drawing.Size(300, 50);
+            this.accountEmailTextBox.Name = "accountEmailTextBox";
+            this.accountEmailTextBox.Size = new System.Drawing.Size(300, 50);
+            this.accountEmailTextBox.TabIndex = 7;
+            // 
+            // accountPasswordTextBox
+            // 
+            this.accountPasswordTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.accountPasswordTextBox.Location = new System.Drawing.Point(50, 320);
+            this.accountPasswordTextBox.MaximumSize = new System.Drawing.Size(300, 50);
+            this.accountPasswordTextBox.MinimumSize = new System.Drawing.Size(300, 50);
+            this.accountPasswordTextBox.Name = "accountPasswordTextBox";
+            this.accountPasswordTextBox.Size = new System.Drawing.Size(300, 50);
+            this.accountPasswordTextBox.TabIndex = 7;
+            // 
             // AdminForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -385,7 +430,7 @@ namespace AdminAppCourierService
             this.Text = "CourierService";
             this.tabControl1.ResumeLayout(false);
             this.tablesTab.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ordersDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tablesDataGridView)).EndInit();
             this.addTab.ResumeLayout(false);
             this.groupBoxCar.ResumeLayout(false);
             this.groupBoxCar.PerformLayout();
@@ -409,27 +454,29 @@ namespace AdminAppCourierService
         private System.Windows.Forms.ComboBox dropDownList;
         private System.Windows.Forms.TabPage addTab;
         private System.Windows.Forms.TabPage archiveTab;
-        private System.Windows.Forms.DataGridView ordersDataGridView;
+        private System.Windows.Forms.DataGridView tablesDataGridView;
         private System.Windows.Forms.GroupBox groupBoxCar;
         private System.Windows.Forms.GroupBox groupBoxMover;
         private System.Windows.Forms.GroupBox groupBoxDriver;
         private System.Windows.Forms.Button addCarButton;
-        private System.Windows.Forms.TextBox textBoxCarLastMaintenance;
-        private System.Windows.Forms.TextBox textBoxCarYear;
-        private System.Windows.Forms.TextBox textBoxCarMileage;
-        private System.Windows.Forms.TextBox textBoxCarNumber;
-        private System.Windows.Forms.TextBox textBoxCarName;
         private System.Windows.Forms.Button addMoverButton;
-        private System.Windows.Forms.TextBox textBoxMoverPhone;
-        private System.Windows.Forms.TextBox textBoxMoverName;
         private System.Windows.Forms.Button addDriverButton;
-        private System.Windows.Forms.TextBox textBoxDriverPhone;
-        private System.Windows.Forms.TextBox textBoxDriverName;
         private System.Windows.Forms.DataGridView archiveDataGridView;
         private System.Windows.Forms.Label totalIncomeLabel;
         private System.Windows.Forms.Label countOfOrdersLabel;
         private System.Windows.Forms.Button showButton;
         private System.Windows.Forms.DateTimePicker dateTimePickerEnd;
         private System.Windows.Forms.DateTimePicker dateTimePickerStart;
+        private System.Windows.Forms.TextBox carLastMaintenanceTextBox;
+        private System.Windows.Forms.TextBox carMileageTextBox;
+        private System.Windows.Forms.TextBox carIssueYearTextBox;
+        private System.Windows.Forms.TextBox carRegistryNumberTextBox;
+        private System.Windows.Forms.TextBox carMarkTextBox;
+        private System.Windows.Forms.TextBox moverNameTextBox;
+        private System.Windows.Forms.TextBox moverPhoneTextBox;
+        private System.Windows.Forms.TextBox driverNameTextBox;
+        private System.Windows.Forms.TextBox driverPhoneTextBox;
+        private System.Windows.Forms.TextBox accountPasswordTextBox;
+        private System.Windows.Forms.TextBox accountEmailTextBox;
     }
 }
