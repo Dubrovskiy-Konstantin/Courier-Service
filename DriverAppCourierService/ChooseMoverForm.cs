@@ -15,6 +15,14 @@ namespace DriverAppCourierService
         public ChooseMoverForm()
         {
             InitializeComponent();
+
+            carsDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            carsDataGridView.AllowUserToAddRows = false;
+            carsDataGridView.DataSource = DataHandler.SetData("Cars").Tables[0];
+
+            moversDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            moversDataGridView.AllowUserToAddRows = false;
+            moversDataGridView.DataSource = DataHandler.SetData("Movers").Tables[0];
         }
     }
 }

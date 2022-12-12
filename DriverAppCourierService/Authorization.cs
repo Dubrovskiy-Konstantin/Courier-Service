@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DriverAppCourierService.Entities;
 
 namespace DriverAppCourierService
 {
@@ -19,8 +20,31 @@ namespace DriverAppCourierService
 
         private void logInButton_Click(object sender, EventArgs e)
         {
-            OrdersForm ordersForm = new OrdersForm();
-            ordersForm.Show();
+            List<TextBox> list = new List<TextBox>()
+            {
+                loginTextBox, passwordTextBox
+            };
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i].Text == string.Empty)
+                {
+                    MessageBox.Show("Empty box detected. Please fill all boxes.");
+                    return;
+                }
+            }
+
+            List<Accounts> accounts = SqlWorkerDriverApp.GetAccounts();
+
+            for (int i = 0; i < accounts.Count; i++)
+            {
+                if (accounts[i].Email == loginTextBox.Text && accounts[i].Password == passwordTextBox.Text)
+                {
+                    OrdersForm ordersForm = new OrdersForm(accounts[i].IdDriver);
+                    ordersForm.Show();
+                    break;
+                }
+            }
         }
     }
 }

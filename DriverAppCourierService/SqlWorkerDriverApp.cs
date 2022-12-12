@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
-using AdminAppCourierService.Entities;
+using DriverAppCourierService.Entities;
 
-namespace AdminAppCourierService
+namespace DriverAppCourierService
 {
-    static class SqlWorkerAdminApp
+    static class SqlWorkerDriverApp
     {
         public readonly static string connectionString = @"Data Source=DANILA; Initial Catalog=CourierService; Integrated Security=True;";
         delegate List<List<object>> DBOperation(params string[] operations);

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdminAppCourierService.Entities
+namespace DriverAppCourierService.Entities
 {
     class Movers
     {
