@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace DriverAppCourierService.Entities
 {
-    class Adresses
+    class Addresses
     {
         public int Id { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
         public string Address { get; set; }
 
         public override string ToString()
