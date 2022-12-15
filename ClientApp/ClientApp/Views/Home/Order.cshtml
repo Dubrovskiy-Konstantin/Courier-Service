@@ -1,0 +1,363 @@
+﻿@model ClientApp.Models.UserOrder
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    var order = new UserOrder();
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script>
+    activeButton("#home-button");
+</script>
+<script src="~/js/deliveryCalculator.js" type="text/javascript"></script>
+<section id="order" class="page">
+    <div>
+        <div id="map"></div>
+    </div>
+    <form id="order-form" class="row g-3">
+        <div id="labels" class="row g-3">
+            <div class="col-md-12">
+                <label class="col-form-label col-form-label-lg">Добавьте позиции для перевозки</label>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Название:</label>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Описание:</label>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Количество:</label>
+            </div>
+        </div>
+
+        <ul id="input-items" class="row g-1" style="margin-bottom: 0px;">
+            <li id="item-1" class="row g-1">
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="name-1" placeholder="Название" maxlength="64" required>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" id="description-1" placeholder="Описание" maxlength="128">
+                </div>
+                <div class="col-md-2">
+                    <input type="number" class="form-control" id="count-1" value="1" min="1" max="100" required>
+                </div>
+                <div class="col-md-1">
+                    <button id="remove-1" type="button" class="btn btn-outline-danger" title="Удалить">x</button>
+                </div>
+            </li>
+        </ul>
+
+        <div class="row g-1">
+            <div class="col-md-1">
+                <button id="button-add-item" class="btn btn btn-outline-light" type="button" title="Добавить еще">+</button>
+                <script>
+                    let ulInputItems = document.getElementById("input-items");
+                    let liClone = ulInputItems.querySelector('li').cloneNode(true);
+                    let inputItemsId = 1;
+
+                    function onRemoveItemButtonClick() {
+                        let id = `item-${this.id.split('-')[1]}`;
+                        console.log(`remove item with id='${id}'`);
+                        let itemsCount = ulInputItems.querySelectorAll("li").length;
+
+                        if (itemsCount <= 1) {
+                            console.log("can't remove the only one last item");
+                            return;
+                        }
+
+                        ulInputItems.querySelector(`#${id}`).remove();
+                    }
+
+                    function onAddMoreItemsButtonClick() {
+                        console.log("add new item");
+                        inputItemsId++;
+
+                        let newItem = liClone.cloneNode(true);
+                        newItem.querySelector("#name-1").id = `name-${inputItemsId}`;
+                        newItem.querySelector("#description-1").id = `description-${inputItemsId}`;
+                        newItem.querySelector("#count-1").id = `count-${inputItemsId}`;
+                        newItem.querySelector("#remove-1").id = `remove-${inputItemsId}`;
+                        newItem.querySelector(`#remove-${inputItemsId}`).addEventListener("click", onRemoveItemButtonClick);
+                        newItem.id = `item-${inputItemsId}`;
+
+                        document.getElementById("input-items").appendChild(newItem);
+                    }
+
+                    document.getElementById("button-add-item").addEventListener("click", onAddMoreItemsButtonClick);
+                    document.getElementById("remove-1").addEventListener("click", onRemoveItemButtonClick);
+
+                </script>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="name" class="form-label">Ваше имя:</label>
+                <input type="text" class="form-control" id="name" placeholder="Имя" maxlength="64">
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-5">
+                <label for="phone" class="form-label">Телефон:</label>
+                <input type="text" class="form-control" id="phone" placeholder="+375(__)___-__-__" maxlength="16" required>
+                <script>
+                    $("#phone").mask("+375(99)999-99-99");
+                </script>
+            </div>
+        </div>
+
+        <div class="row g-2">
+            <div class="col-md-12">
+                <label for="email" class="form-label">Электронная почта (необязательно):</label>
+                <input type="email" class="form-control" id="email" placeholder="my.email.address@something.com">
+            </div>
+        </div>
+        <small class="text-muted g-1" style="padding: 0px;">если хотите получать сообщения об изменении статуса заказа</small>
+
+        <div class="row g-2" style="display: flex;  align-items: center; justify-content: start;">
+            <div class="col-md-4" style="display: flex;  align-items: center;">
+                <label for="movers" class="form-label" style="margin: 0px;">Количество грузчиков:</label>
+            </div>
+            <div class="col-md-2">
+                <input type="number" class="form-control" id="movers" value="0" min="0" max="4" required>
+            </div>
+        </div>
+        <small class="text-muted g-1" style="text-align: start;">(повлияет на скорость погрузки/разгрузки, а также на стоимость заказа)</small>
+
+        <div class="row g-2">
+            <div class="col-md-4">
+                <label for="date" class="form-label">Дата:</label>
+                <input type="date" class="form-control" id="date" required>
+            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-3">
+                <label for="time" class="form-label">Время с:</label>
+                <input type="time" class="form-control" id="time1" required><span class="validity"></span>
+            </div>
+            <div class="col-md-3">
+                <label for="time2" class="form-label">Время по:</label>
+                <input type="time" class="form-control" id="time2"><span class="validity"></span>
+                <small class="text-muted g-1">(необязательно)</small>
+                <style>
+                    #time1 + span,
+                    #time2 + span {
+                        padding-right: 30px;
+                    }
+
+                    #time1:invalid + span::after,
+                    #time2:invalid + span::after {
+                        position: absolute;
+                        content: "✖";
+                        padding-left: 5px;
+                    }
+
+                    #time1:valid + span::after,
+                    #time2:valid + span::after {
+                        position: absolute;
+                        content: "✓";
+                        padding-left: 5px;
+                    }
+                </style>
+                <script>
+                    function getFormattedDateTime(date) {
+                        try {
+                            return {
+                                'year': date.getFullYear(),
+                                'month': new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date),
+                                'day': new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date),
+                                'hours': new Intl.DateTimeFormat('ru', { hour: '2-digit', hour12: false }).format(date),
+                                'minutes': new Intl.DateTimeFormat('en', { minute: '2-digit' }).format(date).length == 2 ? // fix browser bug
+                                    new Intl.DateTimeFormat('en', { minute: '2-digit' }).format(date) :
+                                    "0" + new Intl.DateTimeFormat('en', { minute: '2-digit' }).format(date),
+                            };
+                        }
+                        catch {
+                            return null;
+                        }
+                    }
+
+                    { // Initial date and time
+                        const date = getFormattedDateTime(new Date());
+
+                        let currentDate = `${date.year}-${date.month}-${date.day}`;
+                        let inputDate = document.querySelector('#date');
+                        inputDate.value = currentDate;
+                        inputDate.min = currentDate;
+                        inputDate.max = `${date.year + 1}-${date.month}-${date.day}`;
+
+                        let inputTime1 = document.querySelector('#time1');
+                        inputTime1.value = `${date.hours}:${date.minutes}`;
+                        inputTime1.min = `${date.hours}:${date.minutes}`;
+                        inputTime1.max = "22:00";
+                        let inputTime2 = document.querySelector('#time2');
+                        inputTime2.value = "22:00";
+                        inputTime2.min = inputTime1.value;
+                        inputTime2.max = "22:00";
+                    }
+
+                    function dateTimeValidation() {
+                        let now = getFormattedDateTime(new Date());
+
+                        let inputDate = document.querySelector('#date');
+                        let inputTime1 = document.querySelector('#time1');
+                        let inputTime2 = document.querySelector('#time2');
+
+                        const dateTimeFrom = getFormattedDateTime(new Date(`${inputDate.value}T${inputTime1.value}`));
+                        const dateTimeTo = getFormattedDateTime(new Date(`${inputDate.value}T${inputTime2.value}`));
+
+                        if (now.year == dateTimeFrom.year && now.month == dateTimeFrom.month && now.day == dateTimeFrom.day) {
+                            //if today
+                            inputTime1.min = `${now.hours}:${now.minutes}`;
+                            inputTime1.max = "22:00";
+                            inputTime2.min = inputTime1.value;
+                            inputTime2.max = "22:00";
+                        }
+                        else {
+                            //if other day
+                            inputTime1.min = `08:00`;
+                            inputTime1.max = "22:00";
+                            inputTime2.min = inputTime1.value;
+                            inputTime2.max = "22:00";
+                        }
+                    }
+
+                    document.querySelector('#time1').addEventListener('input', dateTimeValidation);
+                    document.querySelector('#date').addEventListener('input', dateTimeValidation);
+                </script>
+            </div>
+        </div>
+        <div class="row g-2" style="display: flex;  align-items: center; justify-content: start;">
+            <div class="col-md-4" style="display: flex;  align-items: center;">
+                <label for="costs" class="form-label" style="margin: 0px;">Стоимость составит:</label>
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" id="costs" value="0 BYN" readonly>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="invisible">
+                <div class="col-md-3" style="display: flex;  align-items: center;">
+                    <label for="costs" class="form-label" style="margin: 0px;">Оплата онлайн:</label>
+                    <span class="online-pay-marker"></span>
+                    <style>
+                        .online-pay-marker::after {
+                            content: "✖";
+                            padding-left: 8px;
+                        }
+
+                        .online-pay-marker-ok::after {
+                            content: "✓";
+                            padding-left: 8px;
+                        }
+                    </style>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" id="online-pay-button" class="btn btn-outline-warning" title="Вы будете перенаправлены">Оплатить</button>
+                </div>
+            </div>
+            <script>
+                            function getFullData() {
+                                let data = {
+                                    'pointFrom': { 'text': "", 'coordinates': [] },
+                                    'pointTo': { 'text': "", 'coordinates': [] },
+                                    'inputItems': [],
+                                    'name': "",
+                                    'phone': "",
+                                    'email': null,
+                                    'movers': 0,
+                                    'date': null,
+                                    'timeFrom': null,
+                                    'timeTo': null,
+                                    'distance': 0.0,
+                                    'cost': 0.0,
+                                    'payed': false
+                                }
+
+                                data.pointFrom.text = document.querySelectorAll("input.ymaps-2-1-79-route-panel-input__input")[0].value;
+                                data.pointFrom.coordinates = ACTIVE_ROUTE.properties.get('boundedBy')[0];
+                                data.pointTo.text = document.querySelectorAll("input.ymaps-2-1-79-route-panel-input__input")[1].value;
+                                data.pointTo.coordinates = ACTIVE_ROUTE.properties.get('boundedBy')[1];
+                                console.log(`https://yandex.by/maps/?ll=auto&mode=routes&rtext=${data.pointFrom.coordinates[0]}%2C${data.pointFrom.coordinates[1]}~${data.pointTo.coordinates[0]}%2C${data.pointTo.coordinates[1]}&rtt=auto&ruri=~&z=auto`)
+
+                                document.querySelectorAll('ul#input-items li').forEach(li => {
+                                    let id = li.id.split('-')[1];
+
+                                    let item = {};
+                                    item.name = li.querySelector(`#name-${id}`).value;
+                                    item.description = li.querySelector(`#description-${id}`).value;
+                                    item.count = li.querySelector(`#count-${id}`).value;
+                                    data.inputItems.push(item);
+                                });
+
+                                data.name = document.querySelector('#name').value;
+                                data.phone = document.querySelector('#phone').value;
+                                data.email = document.querySelector('#email').value != "" ? document.querySelector('#email').value : null;
+                                data.date = document.querySelector("#date").value;
+                                data.movers = document.querySelector("#movers").value;
+                                data.timeFrom = document.querySelector("#time1").value;
+                                data.timeTo = document.querySelector("#time2").value;
+                                data.distance = parseFloat(DISTANCE);
+                                data.cost = TOTAL_COST;
+                                data.payed = PAYED;
+
+                                return data;
+                            }
+
+                            function onSuccessPayment() {
+                                let marker = document.querySelector('span[class |= "online-pay-marker"]');
+                                marker.classList.toggle("online-pay-marker");
+                                marker.classList.toggle("online-pay-marker-ok");
+
+                                let data = getFullData();
+
+                                $.post("@Url.Action("PayBill", "Home")", {
+                                    pointFrom: { text: data.pointFrom.text, x: data.pointFrom.coordinates[0], y: data.pointFrom.coordinates[1] },
+                                    pointTo: { text: data.pointTo.text, x: data.pointTo.coordinates[0], y: data.pointTo.coordinates[1] },
+                                    items: data.inputItems,
+                                    name: data.name,
+                                    phone: data.phone,
+                                    email: data.email,
+                                    movers: data.movers,
+                                    date: data.date,
+                                    timeFrom: data.timeFrom,
+                                    timeTo: data.timeTo,
+                                    distance: data.distance,
+                                    cost: data.cost,
+                                    payed: data.payed,
+                                });
+                            }
+
+                            document.querySelector("#online-pay-button").addEventListener("click", onSuccessPayment); // Потом поменять можно
+            </script>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-12">
+                <button id="submit" type="submit" class="btn btn-lg btn-outline-primary">Оформить</button>
+            </div>
+        </div>
+        <div class="row g-3"></div>
+    </form>
+    <script>
+                    document.querySelector('#order-form').addEventListener('submit', onSubmit);
+
+                    function onSubmit() {
+                        let data = getFullData();
+                        console.log(data);
+
+                        $.post("@Url.Action("Create", "Home")", {
+                            pointFrom: { text: data.pointFrom.text, x: data.pointFrom.coordinates[0], y: data.pointFrom.coordinates[1] },
+                            pointTo: { text: data.pointTo.text, x: data.pointTo.coordinates[0], y: data.pointTo.coordinates[1] },
+                            items: data.inputItems,
+                            name: data.name,
+                            phone: data.phone,
+                            email: data.email,
+                            movers: data.movers,
+                            date: data.date,
+                            timeFrom: data.timeFrom,
+                            timeTo: data.timeTo,
+                            distance: data.distance,
+                            cost: data.cost,
+                            payed: data.payed,
+                        });
+                    }
+    </script>
+    <script src="~/js/countCost.js"></script>
+</section>
