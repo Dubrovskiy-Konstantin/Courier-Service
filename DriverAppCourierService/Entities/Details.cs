@@ -9,9 +9,7 @@ namespace DriverAppCourierService.Entities
     class Details
     {
         public int Id { get; set; }
-        public int OrderNumber { get; set; }
-        public int IdPointFrom { get; set; }
-        public int IdPointTo { get; set; }
+        public int IdOrder { get; set; }
         public string Unit { get; set; }
         public string UnitDescription { get; set; }
         public int UnitAmount { get; set; }

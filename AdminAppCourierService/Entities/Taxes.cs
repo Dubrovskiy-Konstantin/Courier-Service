@@ -14,7 +14,6 @@ namespace AdminAppCourierService.Entities
         public override string ToString()
         {
             return $"";
-
         }
     }
 }

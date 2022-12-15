@@ -9,7 +9,7 @@ namespace AdminAppCourierService.Entities
     class Movers
     {
         public int Id { get; set; }
-        public int? IdOrder { get; set; }
+        public int IdOrder { get; set; }
         public string Name { get; set; }
         public string Phone { get; set; }
 

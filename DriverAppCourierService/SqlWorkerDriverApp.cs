@@ -46,6 +46,31 @@ namespace DriverAppCourierService
             return result;
         };
 
+        public static void Update(string tableName, int id, string column, object value)
+        {
+            if (value.GetType().Equals(typeof(string)))
+            {
+                operation($@"UPDATE [dbo].[{tableName}] SET {column}='{value}' WHERE ID={id}");
+            }
+            else if (value.GetType().Equals(typeof(bool)))
+            {
+                operation($@"UPDATE [dbo].[{tableName}] SET {column}={((bool)value ? 1 : 0)} WHERE ID={id}");
+            }
+            else if (value.GetType().Equals(typeof(DBNull)))
+            {
+                operation($@"UPDATE [dbo].[{tableName}] SET {column}=NULL WHERE ID={id}");
+            }
+            else
+            {
+                operation($@"UPDATE [dbo].[{tableName}] SET {column}={value} WHERE ID={id}");
+            }
+        }
+
+        public static void Delete(string tableName, string column, object value)
+        {
+            operation($@"DELETE [dbo].[{tableName}] WHERE {column}={value}");
+        }
+
         public static List<Accounts> GetAccounts()
         {
             var table = operation($@"SELECT * FROM [dbo].[Accounts]");
@@ -68,19 +93,33 @@ namespace DriverAppCourierService
             operation($@"INSERT INTO [dbo].[Accounts] VALUES ('{email}', '{password}', {id})");
         }
 
-        public static List<Adresses> GetAdresses()
+        public static List<Addresses> GetAddresses()
         {
-            var table = operation($@"SELECT * FROM [dbo].[Adresses]");
-            var adressesList = new List<Adresses>();
+            var table = operation($@"SELECT * FROM [dbo].[Addresses]");
+            var addressesList = new List<Addresses>();
             for (int row = 0; row < table.Count; row++)
             {
-                adressesList.Add(new Adresses()
+                addressesList.Add(new Addresses()
                 {
                     Id = (int)table[row][0],
-                    Address = (string)table[row][1],
+                    X = (double)table[row][1],
+                    Y = (double)table[row][2],
+                    Address = (string)table[row][3],
                 });
             }
-            return adressesList;
+            return addressesList;
+        }
+
+        public static Addresses GetAddressById(int id)
+        {
+            var table = operation($@"SELECT * FROM [dbo].[Addresses] WHERE Id={id}");
+            return new Addresses()
+            {
+                Id = (int)table[0][0],
+                X = (double)table[0][1],
+                Y = (double)table[0][2],
+                Address = (string)table[0][3],
+            };
         }
 
         public static List<Archive> GetArchive()
@@ -98,6 +137,11 @@ namespace DriverAppCourierService
                 });
             }
             return list;
+        }
+
+        public static void AddArchive(string driverName, string carNumber, string orderPoints)
+        {
+            operation($@"INSERT INTO [dbo].[Archive] VALUES ('{driverName}', '{carNumber}', '{orderPoints}')");
         }
 
         public static List<Cars> GetCars()
@@ -120,6 +164,21 @@ namespace DriverAppCourierService
             return list;
         }
 
+        public static Cars GetCarById(int id)
+        {
+            var table = operation($@"SELECT * FROM [dbo].[Cars] WHERE Id={id}");
+            return new Cars()
+            {
+                Id = (int)table[0][0],
+                Mark = (string)table[0][1],
+                RegistryNumber = (string)table[0][2],
+                IssueYear = (int)table[0][3],
+                Mileage = (double)table[0][4],
+                LastMaintenance = (string)table[0][5],
+                IsFree = (bool)table[0][6],
+            };
+        }
+
         public static void AddCar(string mark, string registryNumber, int issueYear, double mileage, string lastMaintenance)
         {
             operation($@"INSERT INTO [dbo].[Cars] VALUES ('{mark}', '{registryNumber}', {issueYear}, {mileage}, '{lastMaintenance}', 1)");
@@ -134,12 +193,28 @@ namespace DriverAppCourierService
                 list.Add(new Details()
                 {
                     Id = (int)table[row][0],
-                    OrderNumber = (int)table[row][1],
-                    IdPointFrom = (int)table[row][2],
-                    IdPointTo = (int)table[row][3],
-                    Unit = (string)table[row][4],
-                    UnitDescription = (string)table[row][5],
-                    UnitAmount = (int)table[row][6],
+                    IdOrder = (int)table[row][1],
+                    Unit = (string)table[row][2],
+                    UnitDescription = (string)table[row][3],
+                    UnitAmount = (int)table[row][4],
+                });
+            }
+            return list;
+        }
+
+        public static List<Details> GetDetailById(string column, int id)
+        {
+            var table = operation($@"SELECT * FROM [dbo].[Details] WHERE {column}={id}");
+            var list = new List<Details>();
+            for (int row = 0; row < table.Count; row++)
+            {
+                list.Add(new Details()
+                {
+                    Id = (int)table[row][0],
+                    IdOrder = (int)table[row][1],
+                    Unit = (string)table[row][2],
+                    UnitDescription = (string)table[row][3],
+                    UnitAmount = (int)table[row][4],
                 });
             }
             return list;
@@ -160,6 +235,18 @@ namespace DriverAppCourierService
                 });
             }
             return list;
+        }
+
+        public static Drivers GetDriverById(int id)
+        {
+            var table = operation($@"SELECT * FROM [dbo].[Drivers] WHERE Id={id}");
+            return new Drivers()
+            {
+                Id = (int)table[0][0],
+                Name = (string)table[0][1],
+                Phone = (string)table[0][2],
+                CountOfOrder = (int)table[0][3],
+            };
         }
 
         public static void AddDriver(string name, string phone)
@@ -185,6 +272,24 @@ namespace DriverAppCourierService
             return list;
         }
 
+        public static Log GetLogById(int id)
+        {
+            var table = operation($@"SELECT * FROM [dbo].[Log] WHERE Id={id}");
+            return new Log()
+            {
+                Id = (int)table[0][0],
+                OrderNumber = (int)table[0][1],
+                EndDate = (string)table[0][2],
+                ArchiveId = (int)table[0][3],
+                Income = (int)table[0][4],
+            };
+        }
+
+        public static void AddLog(int orderNumber, string endDate, int archiveId, int income)
+        {
+            operation($@"INSERT INTO [dbo].[Log] VALUES ('{orderNumber}', '{endDate}', {archiveId}, {income})");
+        }
+
         public static List<Movers> GetMovers()
         {
             var table = operation($@"SELECT * FROM [dbo].[Movers]");
@@ -194,7 +299,7 @@ namespace DriverAppCourierService
                 list.Add(new Movers()
                 {
                     Id = (int)table[row][0],
-                    IdOrder = (int?)table[row][1],
+                    IdOrder = table[row][1] is System.DBNull ? 0 : (int)table[row][1],
                     Name = (string)table[row][2],
                     Phone = (string)table[row][3],
                 });
@@ -218,11 +323,27 @@ namespace DriverAppCourierService
                     Id = (int)table[row][0],
                     IdOrder = (int)table[row][1],
                     IdCar = (int)table[row][2],
-                    IdMover = (int)table[row][3],
-                    IdDriver = (int)table[row][4],
+                    IdDriver = (int)table[row][3],
                 });
             }
             return list;
+        }
+
+        public static void AddNode(int orderId, int carId, int driverId)
+        {
+            operation($@"INSERT INTO [dbo].[Nodes] VALUES ({orderId}, {carId}, {driverId})");
+        }
+
+        public static Nodes GetNodeById(string column, int id)
+        {
+            var table = operation($@"SELECT * FROM [dbo].[Nodes] WHERE {column}={id}");
+            return new Nodes()
+            {
+                Id = (int)table[0][0],
+                IdOrder = (int)table[0][1],
+                IdCar = (int)table[0][2],
+                IdDriver = (int)table[0][3],
+            };
         }
 
         public static List<Orders> GetOrders()
@@ -234,17 +355,44 @@ namespace DriverAppCourierService
                 list.Add(new Orders()
                 {
                     Id = (int)table[row][0],
-                    OrderNumber = (int)table[row][1],
-                    TotalDistance = (float)table[row][2],
-                    Cost = (float)table[row][3],
-                    Express = (bool)table[row][4],
-                    Status = (int)table[row][5],
-                    ClientName = (string)table[row][6],
-                    ClientPhone = (string)table[row][7],
-                    Date = (string)table[row][8],
+                    TotalDistance = (double)table[row][1],
+                    Cost = (double)table[row][2],
+                    Payed = (bool)table[row][3],
+                    Status = (int)table[row][4],
+                    ClientName = (string)table[row][5],
+                    ClientPhone = (string)table[row][6],
+                    ClientEmail = table[0][7] is System.DBNull ? null : (string)table[0][7],
+                    ExpectedNumOfMovers = (int)table[row][8],
+                    IdPointFrom = (int)table[row][9],
+                    IdPointTo = (int)table[row][10],
+                    TimeFrom = (string)table[row][11],
+                    TimeTo = (string)table[row][12],
+                    Date = (string)table[row][13],
                 });
             }
             return list;
+        }
+
+        public static Orders GetOrderById(int id)
+        {
+            var table = operation($@"SELECT * FROM [dbo].[Orders] WHERE Id={id}");
+            return new Orders()
+            {
+                Id = (int)table[0][0],
+                TotalDistance = (double)table[0][1],
+                Cost = (double)table[0][2],
+                Payed = (bool)table[0][3],
+                Status = (int)table[0][4],
+                ClientName = (string)table[0][5],
+                ClientPhone = (string)table[0][6],
+                ClientEmail = table[0][7] is System.DBNull ? null : (string)table[0][7],
+                ExpectedNumOfMovers = (int)table[0][8],
+                IdPointFrom = (int)table[0][9],
+                IdPointTo = (int)table[0][10],
+                TimeFrom = (string)table[0][11],
+                TimeTo = (string)table[0][12],
+                Date = (string)table[0][13],
+            };
         }
 
         public static List<Taxes> GetTaxes()

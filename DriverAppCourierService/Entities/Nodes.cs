@@ -11,7 +11,6 @@ namespace DriverAppCourierService.Entities
         public int Id { get; set; }
         public int IdOrder { get; set; }
         public int IdCar { get; set; }
-        public int IdMover { get; set; }
         public int IdDriver { get; set; }
 
         public override string ToString()

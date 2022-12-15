@@ -43,10 +43,12 @@ namespace DriverAppCourierService
             this.ordersDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ordersDataGridView.Location = new System.Drawing.Point(40, 100);
             this.ordersDataGridView.Name = "ordersDataGridView";
+            this.ordersDataGridView.ReadOnly = true;
             this.ordersDataGridView.RowHeadersWidth = 51;
             this.ordersDataGridView.RowTemplate.Height = 24;
             this.ordersDataGridView.Size = new System.Drawing.Size(1300, 650);
             this.ordersDataGridView.TabIndex = 0;
+            this.ordersDataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ordersDataGridView_CellDoubleClick);
             // 
             // refreshButton
             // 
@@ -57,6 +59,7 @@ namespace DriverAppCourierService
             this.refreshButton.TabIndex = 1;
             this.refreshButton.Text = "Refresh";
             this.refreshButton.UseVisualStyleBackColor = true;
+            this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
             // 
             // mapButton
             // 
@@ -67,6 +70,7 @@ namespace DriverAppCourierService
             this.mapButton.TabIndex = 2;
             this.mapButton.Text = "Map";
             this.mapButton.UseVisualStyleBackColor = true;
+            this.mapButton.Click += new System.EventHandler(this.mapButton_Click);
             // 
             // finishOrderButton
             // 
@@ -93,11 +97,11 @@ namespace DriverAppCourierService
             // 
             this.currentOrderLabel.AutoSize = true;
             this.currentOrderLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.currentOrderLabel.Location = new System.Drawing.Point(620, 785);
+            this.currentOrderLabel.Location = new System.Drawing.Point(590, 755);
             this.currentOrderLabel.Name = "currentOrderLabel";
-            this.currentOrderLabel.Size = new System.Drawing.Size(161, 29);
+            this.currentOrderLabel.Size = new System.Drawing.Size(222, 29);
             this.currentOrderLabel.TabIndex = 5;
-            this.currentOrderLabel.Text = "Current order";
+            this.currentOrderLabel.Text = "Pick up new order!";
             // 
             // OrdersForm
             // 
@@ -114,6 +118,8 @@ namespace DriverAppCourierService
             this.Name = "OrdersForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DriverApp";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OrdersForm_FormClosed);
+            this.Load += new System.EventHandler(this.OrdersForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ordersDataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -60,7 +60,7 @@
     </Compile>
     <Compile Include="DataHandler.cs" />
     <Compile Include="Entities\Accounts.cs" />
-    <Compile Include="Entities\Adresses.cs" />
+    <Compile Include="Entities\Addresses.cs" />
     <Compile Include="Entities\Archive.cs" />
     <Compile Include="Entities\Cars.cs" />
     <Compile Include="Entities\Details.cs" />

@@ -29,7 +29,7 @@ namespace DriverAppCourierService
             {
                 if (list[i].Text == string.Empty)
                 {
-                    MessageBox.Show("Empty box detected. Please fill all boxes.");
+                    MessageBox.Show("Empty box detected. Please fill all boxes.", "Warning", MessageBoxButtons.OK);
                     return;
                 }
             }
@@ -40,9 +40,15 @@ namespace DriverAppCourierService
             {
                 if (accounts[i].Email == loginTextBox.Text && accounts[i].Password == passwordTextBox.Text)
                 {
-                    OrdersForm ordersForm = new OrdersForm(accounts[i].IdDriver);
+                    OrdersForm ordersForm = new OrdersForm(accounts[i].IdDriver, this.Close);
                     ordersForm.Show();
                     break;
+                }
+
+                if (i.Equals(accounts.Count - 1))
+                {
+                    MessageBox.Show("Incorrect email or password!", "Warning", MessageBoxButtons.OK);
+                    return;
                 }
             }
         }
