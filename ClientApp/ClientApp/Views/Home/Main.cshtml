@@ -1,0 +1,16 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script>
+    activeButton("#home-button");
+</script>
+<section id="home" class="page">
+    <h1>Доставим ваш груз</h1>
+    <p class="lead">Если вам надоел старый диван и вы хотите купить новый, если вы затеяли ремонт и вам необхоимо доставить стройматериалы из магазина прямо на строительный объект, если вы переезжаете или даже если разбираете весь скопившийся хлам из гаража, мы вам с этим поможем! Заказывайте доставку, сделаем все быстро и четко!</p>
+    <p class="lead">
+        <a id="order-button" asp-controller="Home" asp-action="Order" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Заказать</a>
+    </p>
+</section>
