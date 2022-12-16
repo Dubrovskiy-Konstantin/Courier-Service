@@ -10,7 +10,11 @@ namespace AdminAppCourierService
 {
     static class SqlWorkerAdminApp
     {
-        public readonly static string connectionString = @"Data Source=DANILA; Initial Catalog=CourierService; Integrated Security=True;";
+        //public readonly static string connectionString = @"Data Source=DANILA; Initial Catalog=CourierService; Integrated Security=True;";
+        public readonly static string connectionString = @"Data Source=mssql-99901-0.cloudclusters.net,10105;" +
+                  "Initial Catalog=CourierService;" +
+                  "User id=Admin;" +
+                  "Password=123QWErty;";
         delegate List<List<object>> DBOperation(params string[] operations);
         private static DBOperation operation = delegate (string[] operations)
         {

@@ -14,6 +14,7 @@ namespace DriverAppCourierService
     public partial class OrdersForm : Form
     {
         private Drivers currentDriver;
+        private int driverId;
         public delegate void ShowAncestor();
         private ShowAncestor showAncestor;
 
@@ -24,10 +25,13 @@ namespace DriverAppCourierService
             InitializeComponent();
 
             currentDriver = SqlWorkerDriverApp.GetDriverById(driverId);
+            this.driverId = driverId;
         }
 
         private void finishOrderButton_Click(object sender, EventArgs e)
         {
+            currentDriver = SqlWorkerDriverApp.GetDriverById(driverId);
+
             if (currentDriver.CountOfOrder == 0)
             {
                 MessageBox.Show("You don't have an order to finish!", "Warning", MessageBoxButtons.OK);
@@ -75,11 +79,15 @@ namespace DriverAppCourierService
                 SqlWorkerDriverApp.AddLog(order.Id, order.Date, archive[archive.Count - 1].Id, (int)order.Cost);
 
                 MessageBox.Show("Order finished successfully!", "Success", MessageBoxButtons.OK);
+                currentOrderLabel.Text = "Pick up new order!";
+                currentOrderLabel.Left = 700 - (2 * currentOrderLabel.Size.Width);
             }
         }
 
         private void refreshButton_Click(object sender, EventArgs e)
         {
+            currentDriver = SqlWorkerDriverApp.GetDriverById(driverId);
+
             ordersDataGridView.DataSource = DataHandler.SetData("Orders").Tables[0];
             ordersDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             ordersDataGridView.AllowUserToAddRows = false;
@@ -102,13 +110,15 @@ namespace DriverAppCourierService
 
         private void ordersDataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            currentDriver = SqlWorkerDriverApp.GetDriverById(driverId);
+
             if (currentDriver.CountOfOrder == 1)
             {
                 MessageBox.Show("You already have an order.\nYou can pick another when you finish with current order!", "Warning", MessageBoxButtons.OK);
             }
             else
             {
-                ChooseMoverForm chooseMoverForm = new ChooseMoverForm((int)ordersDataGridView.Rows[e.RowIndex].Cells[0].Value, currentDriver.Id, this.Close);
+                ChooseMoverForm chooseMoverForm = new ChooseMoverForm((int)ordersDataGridView.Rows[e.RowIndex].Cells[0].Value, currentDriver.Id);
                 chooseMoverForm.Show();
             }
         }
