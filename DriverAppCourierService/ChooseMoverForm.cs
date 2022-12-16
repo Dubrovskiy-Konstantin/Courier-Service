@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,13 +16,9 @@ namespace DriverAppCourierService
     public partial class ChooseMoverForm : Form
     {
         private int orderId, driverId;
-        public delegate void ShowAncestor();
-        private ShowAncestor showAncestor;
 
-        public ChooseMoverForm(int orderId, int driverId, ShowAncestor _delegate)
+        public ChooseMoverForm(int orderId, int driverId)
         {
-            showAncestor = _delegate;
-
             InitializeComponent();
 
             this.orderId = orderId;
@@ -82,6 +80,7 @@ namespace DriverAppCourierService
                 SqlWorkerDriverApp.Update("Cars", (int)carsDataGridView.SelectedRows[0].Cells[0].Value, "Is_Free", 0);
 
                 MessageBox.Show($"Order successfully started!", "Success", MessageBoxButtons.OK);
+                
                 OrdersForm ordersForm = new OrdersForm(driverId, this.Close);
                 ordersForm.Show();
                 this.Hide();
@@ -100,7 +99,7 @@ namespace DriverAppCourierService
 
         private void ChooseMoverForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            showAncestor.Invoke();
+            
         }
 
         private void backButton_Click(object sender, EventArgs e)
@@ -108,6 +107,21 @@ namespace DriverAppCourierService
             OrdersForm ordersForm = new OrdersForm(driverId, this.Close);
             ordersForm.Show();
             this.Hide();
+        }
+
+        private void SendEmail(string email)
+        {
+
+            MailAddress from = new MailAddress("curier.aaa.bbb@yandex.ru", "Site");// отправитель - устанавливаем адрес и отображаемое в письме имя            
+            MailAddress to = new MailAddress(email);// кому отправляем            
+            MailMessage m = new MailMessage(from, to);// создаем объект сообщения            
+            m.Subject = "Доставка";// тема письма            
+            m.Body = "<h2>Ваш заказ в пути!</h2>";// текст письма            
+            m.IsBodyHtml = true;// письмо представляет код html            
+            SmtpClient smtp = new SmtpClient("smtp.yandex.ru", 465);// адрес smtp-сервера и порт, с которого будем отправлять письмо            
+            smtp.Credentials = new NetworkCredential("curier.aaa.bbb@yandex.ru", "nhgjnjab");// логин и пароль
+            smtp.EnableSsl = true;
+            smtp.Send(m);
         }
     }
 }

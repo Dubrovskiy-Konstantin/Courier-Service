@@ -33,7 +33,7 @@ namespace AdminAppCourierService
             {
                 Log log = SqlWorkerAdminApp.GetLogById(1);
 
-                dateTimePickerStart.MinDate = DateTime.ParseExact(log.EndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                dateTimePickerStart.MinDate = DateTime.ParseExact(log.EndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(-1);
                 dateTimePickerEnd.MinDate = DateTime.ParseExact(log.EndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             }
             else
@@ -74,6 +74,7 @@ namespace AdminAppCourierService
                 MessageBox.Show("Email isn't correct!", "Warning", MessageBoxButtons.OK);
                 return;
             }
+
             try
             {
                 var addr = new System.Net.Mail.MailAddress(accountEmailTextBox.Text);
@@ -84,6 +85,12 @@ namespace AdminAppCourierService
                 return;
             }
 
+            if (driverPhoneTextBox.Text.Length != 17)
+            {
+                MessageBox.Show("Phone isn't full!", "Warning", MessageBoxButtons.OK);
+                return;
+            }
+
             List<Drivers> drivers = SqlWorkerAdminApp.GetDrivers();
 
             for (int i = 0; i < drivers.Count; i++)
@@ -91,6 +98,17 @@ namespace AdminAppCourierService
                 if (drivers[i].Phone == driverPhoneTextBox.Text)
                 {
                     MessageBox.Show("Driver with this phone number already exists!", "Warning", MessageBoxButtons.OK);
+                    return;
+                }
+            }
+
+            List<Accounts> accounts = SqlWorkerAdminApp.GetAccounts();
+
+            for (int i = 0; i < drivers.Count; i++)
+            {
+                if (accounts[i].Email == accountEmailTextBox.Text)
+                {
+                    MessageBox.Show("Driver with this email already exists!", "Warning", MessageBoxButtons.OK);
                     return;
                 }
             }
@@ -124,11 +142,17 @@ namespace AdminAppCourierService
                 return;
             }
 
+            if (moverPhoneTextBox.Text.Length != 17)
+            {
+                MessageBox.Show("Phone isn't full!", "Warning", MessageBoxButtons.OK);
+                return;
+            }
+
             List<Movers> movers = SqlWorkerAdminApp.GetMovers();
 
             for (int i = 0; i < movers.Count; i++)
             {
-                if (movers[i].Phone == driverPhoneTextBox.Text)
+                if (movers[i].Phone == moverPhoneTextBox.Text)
                 {
                     MessageBox.Show("Mover with this phone number already exists!", "Warning", MessageBoxButtons.OK);
                     return;
@@ -190,7 +214,7 @@ namespace AdminAppCourierService
 
         private void tablesDataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            string[] bannedColumns = { "Id", "Id_Order", "Id_Car", "Id_Driver", "Id_Point_From", "Id_Point_To", "Count_of_Order", "Is_Free", "Archive_Id", "Payed", "Status" };
+            string[] bannedColumns = { "Id", "Id_Order", "Id_Car", "Id_Driver", "Id_Point_From", "Id_Point_To", "Count_of_Order", "Is_Free", "Archive_Id", "Payed", "Status", "Phone" };
 
             if (string.IsNullOrEmpty(tablesDataGridView.CurrentCell.Value.ToString()))
             {
@@ -458,6 +482,7 @@ namespace AdminAppCourierService
             DateTime dateStart = dateTimePickerStart.Value;
             DateTime dateEnd = dateTimePickerEnd.Value;
 
+
             log = log.FindAll(x =>
                 DateTime.ParseExact(x.EndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture) >= dateStart &&
                 DateTime.ParseExact(x.EndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture) <= dateEnd);
@@ -518,7 +543,6 @@ namespace AdminAppCourierService
                 countOfOrdersLabel.Text = $"Count of orders";
                 totalIncomeLabel.Text = $"Total income";
             }
-            
         }
     }
 }
